@@ -1,0 +1,83 @@
+create table users (
+	userId bigserial primary key not null,
+	fName varchar(255),
+	age smallint,
+	gender varchar(255),
+	major varchar(255),
+	address text,
+	username varchar(255),
+	password text,
+	userRole boolean default false,
+	email varchar(350)
+);
+
+create table chatconnections (
+	user1Id bigserial not null,
+	user2Id bigserial not null,
+	connectionState boolean not null,
+	connectionType boolean not null,
+	foreign key (user1Id) references users(userId) on delete cascade,
+	foreign key (user2Id) references users(userId) on delete cascade,
+	primary key (user1Id, user2Id)
+);
+
+create table messageboxes (
+	messageBoxId bigserial not null primary key,
+	user1Id bigserial not null,
+	user2Id bigserial not null,
+	foreign key (user1Id) references users(userId) on delete cascade,
+	foreign key (user2Id) references users(userId) on delete cascade
+);
+
+create table messages (
+	messageId bigserial primary key not null,
+ 	messageboxid bigserial not null,
+	userid bigserial not null,
+ 	messagecontent text not null,
+ 	createdat timestamp default current_timestamp,
+	foreign key (messageboxid) references messageboxes(messageboxid) on delete cascade,
+	foreign key (userid) references users(userid)
+);
+
+create table hobbies (
+	hobbyId bigserial primary key not null,
+	hobbyType varchar(255) not null
+);
+
+create table usershobby (
+	userid bigserial not null,
+	hobbyid bigserial not null,
+	foreign key (userid) references users(userid),
+	foreign key (hobbyid) references hobbies(hobbyid)
+);
+
+CREATE TABLE "session" (
+  "sid" varchar NOT NULL COLLATE "default",
+	"sess" json NOT NULL,
+	"expire" timestamp(6) NOT NULL
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+
+create table friendrequests (
+	userid bigserial not null,
+	senderid bigserial not null,
+	requeststate boolean,
+	foreign key (userid) references users(userid),
+	foreign key (senderid) references users(userid) on delete cascade
+);
+
+-- Feed data
+-- insert into hobbies
+-- values(default, 'Thể thao'), (default, 'Âm nhạc'), (default, 'Du lịch'), (default, 'Học tập'), (default, 'Game'),
+-- (default, 'Nấu ăn'), (default, 'Làm việc'), (default, 'Tám');
+
+-- insert into usershobby
+-- values(6, 1), (6, 4), (7, 2), (6, 8), (8, 3), (9, 1), (9, 8), (7, 4), (6, 7), (8, 2), (7, 6);
+
+-- insert into usershobby
+-- values(10 , 8),(10 , 6),(10 , 1),(11 , 7),(12 , 1),(11 , 4),(11 , 3),(12 , 3)
+-- ,(13 , 1),(13 , 6),(13 , 7),(13 , 2)

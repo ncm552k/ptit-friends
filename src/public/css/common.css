@@ -1,0 +1,22 @@
+.app {
+    position: relative;
+}
+
+.error-msg {
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+    color: red;
+}
+
+.chosen {
+    border: 5px dashed yellow;
+}
+
+.hidden {
+    display: none;
+}
+
+.clickme:hover {
+    cursor: pointer;
+}
